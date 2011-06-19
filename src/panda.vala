@@ -69,11 +69,6 @@ public class Panda : Darkcore.Sprite {
                 jumping_from.set (0, x);
                 jumping_from.set (1, y);
             }
-            /*
-            if (y > 100) {
-                velocity_y -= gravity;
-            }
-            */
             
             // Check Blocks for collision   
             var state = (GameState) engine.gamestate;
@@ -89,13 +84,6 @@ public class Panda : Darkcore.Sprite {
                      bounding_box1.get (1) < bounding_box2.get (3) &&
                      bounding_box1.get (3) > bounding_box2.get (1));
                 if (hit) {
-                    print("Hit\n");
-                    /*
-                    if (Math.fabs(velocity_x) > Math.fabs(velocity_y)) {
-                        print ("%f - %f", Math.fabs(velocity_x), Math.fabs(velocity_y));
-                        velocity_x = 0;
-                    }
-                    */
                     // Make the character kiss the right side the block
                     if (
                         velocity_x != 0.00 &&
@@ -131,14 +119,6 @@ public class Panda : Darkcore.Sprite {
                         jumping_from.set (1, y);
                         jumping = false;
                     }
-                    
-                    /*
-                    if (Math.fabs(velocity_x) > Math.fabs(velocity_y)) {
-                        velocity_y = 0;
-                    } else {
-                        velocity_x = 0;
-                    }
-                    */
                     break;
                 }
             }
@@ -152,9 +132,12 @@ public class Panda : Darkcore.Sprite {
             
             y += velocity_y;
             x += velocity_x;
+            
+            // Make the camera follow the player!
+            engine.camera_x = -(x - engine.width / 2.00);
+            engine.camera_y = -(y - engine.height / 2.00);
         });
         this.on_key_press = ((engine, player) => {
-            print("Jumping: %i\n", jumping ? 1 : 0);
             if (jumping && jumping_from != null && y - jumping_from.get (1) >= 20) {
                 jumping_from = null;
             }
@@ -164,11 +147,17 @@ public class Panda : Darkcore.Sprite {
             if (engine.keys.s) {
                 velocity_y -= 2;
             }
-            if (engine.keys.d && velocity_x < 8) {
+            if (engine.keys.d && velocity_x < 9) {
                 velocity_x += 3;
             }
-            if (engine.keys.a && velocity_x > -8) {
+            if (engine.keys.a && velocity_x > -9) {
                 velocity_x -= 3;
+            }
+            if (velocity_x > 9.00) {
+                velocity_x = 9.00;
+            }
+            else if (velocity_x < -9.00) {
+                velocity_x = -9.00;
             }
         });    
     }

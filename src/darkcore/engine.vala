@@ -18,6 +18,8 @@ namespace Darkcore { public class Engine : Object {
     public int width;
     public int height;
     public int frames_per_second { get; set; default = 0; }
+    public double camera_x { get; set; default = 0.00; }
+    public double camera_y { get; set; default = 0.00; }
     public Object gamestate;
     
     public Engine(int width, int height) {
@@ -153,7 +155,7 @@ namespace Darkcore { public class Engine : Object {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         // This is where the camera would translate
-        glTranslated(0, 0, -10);
+        glTranslated(camera_x, camera_y, -10);
         
         /*
         TODO: Add tile based map support
