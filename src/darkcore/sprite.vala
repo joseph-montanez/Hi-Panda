@@ -49,6 +49,19 @@ namespace Darkcore { public class Sprite : Object {
         render (world, sprite);
     }
     
+    public Vector get_bounding_box(double mod_x = 0.00, double mod_y = 0.00) {
+        var half_width = (width / 2.00);
+        var half_height = (height / 2.00);
+        var bounding_box = new Darkcore.Vector (4);
+        // 0 => x1, 1 => y1, x2, y2
+        bounding_box.set(0, x + mod_x - half_width);
+        bounding_box.set(1, y + mod_y - half_height);
+        bounding_box.set(2, x + mod_x + half_width);
+        bounding_box.set(3, y + mod_y + half_height);
+        
+        return bounding_box;
+    }
+    
     public virtual void render() {
         Texture? texture = null;
         if (this.texture_index > -1) {

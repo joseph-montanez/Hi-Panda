@@ -9,6 +9,7 @@ public class Panda : Darkcore.Sprite {
         world = engine;
         x = 17;
         y = 22;
+        velocity_y = -1.00;
         anima_normal();
 
         this.width = 18.0;
@@ -22,7 +23,6 @@ public class Panda : Darkcore.Sprite {
             
             var gravity = 1.0;
             velocity_y -= gravity;
-            
             
             if (velocity_x < 1.50 && velocity_x > -1.50) {
                 velocity_x = 0.00;
@@ -49,9 +49,46 @@ public class Panda : Darkcore.Sprite {
             else if (y + velocity_y - (height / 2) <= 0) {
                 velocity_y = 0;
             }
-            
+            /*
             if (y > 100) {
                 velocity_y -= gravity;
+            }
+            */
+            
+            // Check Blocks for collision   
+            var state = (GameState) engine.gamestate;
+            var hit = false;
+            foreach (var block in state.blocks) {
+                var bounding_box1 = block.get_bounding_box();
+                var bounding_box2 = get_bounding_box(velocity_x, velocity_y);
+                
+                hit = 
+                    (bounding_box1.get (0) < bounding_box2.get (2) &&
+                     bounding_box1.get (2) > bounding_box2.get (0) &&
+                     bounding_box1.get (1) < bounding_box2.get (3) &&
+                     bounding_box1.get (3) > bounding_box2.get (1));
+                if (hit) {
+                    print("Hit\n");
+                    if (Math.fabs(velocity_x) > Math.fabs(velocity_y)) {
+                        print ("%f - %f", Math.fabs(velocity_x), Math.fabs(velocity_y));
+                        velocity_x = 0;
+                    }
+                    if (block.y > y) {
+                        velocity_y = -gravity;
+                    }
+                    else if (block.y < y) {
+                        velocity_y = 0;
+                        y = bounding_box1.get(3) + (height / 2); 
+                    }
+                    /*
+                    if (Math.fabs(velocity_x) > Math.fabs(velocity_y)) {
+                        velocity_y = 0;
+                    } else {
+                        velocity_x = 0;
+                    }
+                    */
+                    break;
+                }
             }
             
             if (velocity_x > 0.00) {

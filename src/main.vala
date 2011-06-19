@@ -1,8 +1,10 @@
 public class GameState : Object {
     public unowned Panda panda;
+    public Gee.ArrayList<Darkcore.Sprite> blocks;
     
     public GameState () {
         base();
+        blocks = new Gee.ArrayList<Darkcore.Sprite>();
     }
 }
 
@@ -10,6 +12,7 @@ public class GameDemo : Object {
     public static int main (string[] args) {
         var engine = new Darkcore.Engine(640, 480);
         var state = new GameState();
+        engine.gamestate = state;
         
         engine.add_texture ("resources/font.png");
         
@@ -21,13 +24,20 @@ public class GameDemo : Object {
         };
         engine.sprites.add (text);
         
+        var block1 = new Darkcore.Sprite();
+        block1.color_r = 1;
+        block1.width = 100;
+        block1.x = 100;
+        block1.y = 50;
+        engine.sprites.add(block1);
+        state.blocks.add(block1);
+        
         var pandy = new Panda(ref engine);
         pandy.x = engine.width - 32;
         engine.sprites.add (pandy);
 
         state.panda = pandy;
         
-        engine.gamestate = state;
 
         // Add an event to the renderer
         engine.add_event(Darkcore.EventTypes.Render, () => {

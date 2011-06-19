@@ -218,14 +218,28 @@ namespace Darkcore { public class Engine : Object {
             var new_time = SDL.Timer.get_ticks();
             var time_since_last_frame = new_time - old_time;
             
-            this.process_events ();
+            for (var i = 0; i < 4; i++) {
+                this.process_events ();
 
-            foreach (var sprite in this.sprites) {
-                if (sprite.on_key_press != null) {
-                    sprite.fire_key_press(sprite.on_key_press, this, sprite);
-                }
-            }           
-             
+                foreach (var sprite in this.sprites) {
+                    if (sprite.on_key_press != null) {
+                        sprite.fire_key_press(sprite.on_key_press, this, sprite);
+                    }
+                }      
+
+                foreach (var mgr in timed_events) {
+                    var current = SDL.Timer.get_ticks();
+                    
+                    if (current - mgr.get_active_time () > mgr.get_timeout ()) {
+                        mgr.call_callback ();
+                        // Remove the event from the stack
+                        timed_events.remove (mgr);
+                    }
+                }    
+                
+                SDL.Timer.delay(1000 / (60 * 6));
+            }
+            
             this.draw ();
             fps++;
             
@@ -237,17 +251,7 @@ namespace Darkcore { public class Engine : Object {
                 old_time = new_time;
                 frames_per_second = fps;
                 fps = 0;
-            }
-
-            foreach (var mgr in timed_events) {
-                var current = SDL.Timer.get_ticks();
-                
-                if (current - mgr.get_active_time () > mgr.get_timeout ()) {
-                    mgr.call_callback ();
-                    // Remove the event from the stack
-                    timed_events.remove (mgr);
-                }
-            }  
+            } 
         }  
     }
     
