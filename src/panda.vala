@@ -4,36 +4,48 @@ public class Panda : Darkcore.Sprite {
     public double tile_width { get; set; default = 0.06640625; }
     public double tile_height { get; set; default = 0.0859375; }
     public bool jumping { get; set; default = true; }
+    public Darkcore.Vector? jumping_from;
     
     public Panda (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/Panda_ClausKruuskopf.png");
         world = engine;
         x = 17;
         y = 22;
+        width = 17;
+        height = 22;
         velocity_y = -1.00;
         anima_normal();
 
-        this.width = 18.0;
-        this.height = 23.0;
         this.on_render = ((engine, player) => {
             
             anima_normal ();
-        
-            if (y <= 12.00 && velocity_y < 0) {
-                anima_sit ();
-            }
             
             var gravity = 1.0;
             velocity_y -= gravity;
+        
+            // The down arrow produces -4, greater then gravities -1
+            // If this happens they will be sitting, if not jumping.
+            if (!jumping && velocity_y < -gravity) {
+                anima_sit ();
+            }
             
+            // Prevent the player from twitching back and forth
             if (velocity_x < 1.50 && velocity_x > -1.50) {
                 velocity_x = 0.00;
             }
+            // If they are not jumping then only apply surface friction?
             else if (velocity_x > 0.00 && !jumping) {
                 velocity_x -= 1.00;
             }
             else if (velocity_x < 0.00 && !jumping) {
                 velocity_x += 1.00;
+            }
+            // If they are jumping then only apply wide friction?
+            else if (velocity_x < 0.00 && jumping) {
+                velocity_x += 0.35;
+            }
+            else if (velocity_x > 0.00 && jumping) {
+                velocity_x -= 0.35;
             }
             
             // Check the x-axis
@@ -53,6 +65,9 @@ public class Panda : Darkcore.Sprite {
             else if (y + velocity_y - (height / 2) <= 0) {
                 jumping = false;
                 velocity_y = 0;
+                jumping_from = new Darkcore.Vector(2);
+                jumping_from.set (0, x);
+                jumping_from.set (1, y);
             }
             /*
             if (y > 100) {
@@ -83,6 +98,7 @@ public class Panda : Darkcore.Sprite {
                     */
                     // Make the character kiss the right side the block
                     if (
+                        velocity_x != 0.00 &&
                         bounding_box3.get (2) > bounding_box1.get (2) &&
                         bounding_box3.get (3) < bounding_box1.get (3)
                        ) {
@@ -110,6 +126,9 @@ public class Panda : Darkcore.Sprite {
                     else if (block.y < y) {
                         velocity_y = 0;
                         y = bounding_box1.get(3) + (height / 2); 
+                        jumping_from = new Darkcore.Vector(2);
+                        jumping_from.set (0, x);
+                        jumping_from.set (1, y);
                         jumping = false;
                     }
                     
@@ -136,11 +155,14 @@ public class Panda : Darkcore.Sprite {
         });
         this.on_key_press = ((engine, player) => {
             print("Jumping: %i\n", jumping ? 1 : 0);
-            if (engine.keys.w && jumping == false) {
-               velocity_y += 4;
+            if (jumping && jumping_from != null && y - jumping_from.get (1) >= 20) {
+                jumping_from = null;
+            }
+            if (engine.keys.w && jumping_from != null && y - jumping_from.get (1) < 20) {
+               velocity_y += 1;
             }
             if (engine.keys.s) {
-                velocity_y -= 4;
+                velocity_y -= 2;
             }
             if (engine.keys.d && velocity_x < 8) {
                 velocity_x += 3;
