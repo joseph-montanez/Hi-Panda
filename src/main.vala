@@ -27,10 +27,20 @@ public class GameDemo : Object {
         var block1 = new Darkcore.Sprite();
         block1.color_r = 1;
         block1.width = 100;
-        block1.x = 100;
-        block1.y = 50;
+        block1.height = 100;
+        block1.x = 300;
+        block1.y = 100;
         engine.sprites.add(block1);
         state.blocks.add(block1);
+        
+        var block2 = new Darkcore.Sprite();
+        block2.color_r = 1;
+        block2.width = 100;
+        block2.height = 15;
+        block2.x = 100;
+        block2.y = 50;
+        engine.sprites.add(block2);
+        state.blocks.add(block2);
         
         var pandy = new Panda(ref engine);
         pandy.x = engine.width - 32;
