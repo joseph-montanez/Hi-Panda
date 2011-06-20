@@ -174,12 +174,9 @@ public class Panda : Darkcore.Sprite {
                 gun.height = 32;
                 
                 gun.on_render = (engine, self) => {
-                    
-                    print("x: %f, y: %f\n", engine.mouse_x, engine.mouse_y);
-                    
-                    var a = engine.mouse_x - x;
-                    var b = engine.mouse_y - y;
-                    print("a: %f, b: %f\n", a, b);
+                    // Who ever said Pythagoras' Theorem is pointless!
+                    var a = engine.get_abs_mouse_x() - x;
+                    var b = engine.get_abs_mouse_y() - y;
                     var c = Math.pow(a, 2) + Math.pow(b, 2);
                     c = Math.sqrt(c);
                     var radians = Math.sin(b / c);
@@ -216,7 +213,15 @@ public class Panda : Darkcore.Sprite {
                         gun.x = x;
                         degrees = 0.00;
                     }
-                    print("angle: %f\n", degrees);
+                    
+                    //radians = degrees / 57.2957795;
+                    /*
+                    var mod_x = (width / 2 * Math.cos(radians)) - (height / 2 * Math.sin(radians));
+                    var mod_y = (width / 2 * Math.sin(radians)) - (height / 2 * Math.cos(radians));
+                    print("X: %f Y: %f\n", mod_x, mod_y);
+                    gun.x = x - (width) + mod_x * 2;
+                    gun.y = y + height + mod_y * 2;
+                    */
                     
                     gun.rotation = degrees;
                     gun.y = y;

@@ -60,8 +60,8 @@ namespace Darkcore { public class Engine : Object {
         while (Event.poll (event) == 1) {
             switch (event.type) {
             case EventType.MOUSEMOTION:
-                mouse_x = event.motion.x + (-1 * camera_x);
-                mouse_y = (height - event.motion.y) - camera_y;
+                mouse_x = event.motion.x;
+                mouse_y = event.motion.y;
                 break;
             case EventType.QUIT:
                 this.done = true;
@@ -74,6 +74,14 @@ namespace Darkcore { public class Engine : Object {
                 break;
             }
         }
+    }
+    
+    public double get_abs_mouse_x () {
+        return mouse_x + (-1 * camera_x);
+    }
+    
+    public double get_abs_mouse_y () {
+        return (height - mouse_y) - camera_y;
     }
 
     public void on_keyboard_event (KeyboardEvent event, bool isdown) {
