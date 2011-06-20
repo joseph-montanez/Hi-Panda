@@ -10,6 +10,8 @@ namespace Darkcore { public class Sprite : Object {
     public double rotation { get; set; default = 0.00; }
     public double width { get; set; default = 32.00; }
     public double height { get; set; default = 32.00; }
+    public double tile_width { get; set; default = 0.00; }
+    public double tile_height { get; set; default = 0.00; }
     public double coords_top_left_x { get; set; default = 0.00; }
     public double coords_top_left_y { get; set; default = 0.00; }
     public double coords_bottom_left_x { get; set; default = 1.00; }
@@ -60,6 +62,37 @@ namespace Darkcore { public class Sprite : Object {
         bounding_box.set(3, y + mod_y + half_height);
         
         return bounding_box;
+    }
+    
+    public void anima_tile (int x, int y) {
+        coords_top_left_x     = 0.00 + (tile_width * x);
+        coords_top_left_y     = 0.00 + (tile_height * y);
+        coords_bottom_left_x  = tile_width + (tile_width * x);
+        coords_bottom_left_y  = 0.00 + (tile_height * y);
+        coords_bottom_right_x = tile_width + (tile_width * x);
+        coords_bottom_right_y = tile_height + (tile_height * y);
+        coords_top_right_x    = 0.00 + (tile_width * x);
+        coords_top_right_y    = tile_height + (tile_height * y);
+    }
+    
+    public void anima_flip() {
+        var tmp_top_left_x     = this.coords_top_left_x;
+        var tmp_top_left_y     = this.coords_top_left_y;
+        var tmp_bottom_left_x  = this.coords_bottom_left_x;
+        var tmp_bottom_left_y  = this.coords_bottom_left_y;
+        var tmp_bottom_right_x = this.coords_bottom_right_x;
+        var tmp_bottom_right_y = this.coords_bottom_right_y;
+        var tmp_top_right_x    = this.coords_top_right_x;
+        var tmp_top_right_y    = this.coords_top_right_y;
+        
+        this.coords_top_left_x     = tmp_bottom_left_x;
+        this.coords_top_left_y     = tmp_bottom_left_y;
+        this.coords_bottom_left_x  = tmp_top_left_x;
+        this.coords_bottom_left_y  = tmp_top_left_y;
+        this.coords_bottom_right_x = tmp_top_right_x;
+        this.coords_bottom_right_y = tmp_top_right_y;
+        this.coords_top_right_x    = tmp_bottom_right_x;
+        this.coords_top_right_y    = tmp_bottom_right_y;
     }
     
     public virtual void render() {

@@ -20,6 +20,8 @@ namespace Darkcore { public class Engine : Object {
     public int frames_per_second { get; set; default = 0; }
     public double camera_x { get; set; default = 0.00; }
     public double camera_y { get; set; default = 0.00; }
+    public double mouse_x { get; set; default = 0.00; }
+    public double mouse_y { get; set; default = 0.00; }
     public Object gamestate;
     
     public Engine(int width, int height) {
@@ -57,6 +59,10 @@ namespace Darkcore { public class Engine : Object {
         Event event = Event ();
         while (Event.poll (event) == 1) {
             switch (event.type) {
+            case EventType.MOUSEMOTION:
+                mouse_x = event.motion.x + (-1 * camera_x);
+                mouse_y = (height - event.motion.y) - camera_y;
+                break;
             case EventType.QUIT:
                 this.done = true;
                 break;

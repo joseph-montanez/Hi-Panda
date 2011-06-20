@@ -1,13 +1,16 @@
+using SDL;
+
 public class Panda : Darkcore.Sprite {
     public double velocity_x { get; set; default = 0.00; }
     public double velocity_y { get; set; default = 0.00; }
-    public double tile_width { get; set; default = 0.06640625; }
-    public double tile_height { get; set; default = 0.0859375; }
     public bool jumping { get; set; default = true; }
+    public bool has_gun { get; set; default = false; }
     public Darkcore.Vector? jumping_from;
     
     public Panda (ref Darkcore.Engine engine) {
         base.from_file (engine, "resources/Panda_ClausKruuskopf.png");
+        tile_width = 0.06640625;
+        tile_height = 0.0859375;
         world = engine;
         x = 17;
         y = 22;
@@ -153,44 +156,74 @@ public class Panda : Darkcore.Sprite {
             if (engine.keys.a && velocity_x > -9) {
                 velocity_x -= 3;
             }
+            
+            // Ensure Constant Velocity
             if (velocity_x > 9.00) {
                 velocity_x = 9.00;
             }
             else if (velocity_x < -9.00) {
                 velocity_x = -9.00;
             }
+            
+            if (engine.keys.up && !has_gun) {
+                has_gun = true;
+                print("up\n");
+                var gun = new Darkcore.Sprite.from_texture(world, 1);
+                
+                gun.width = 32;
+                gun.height = 32;
+                
+                gun.on_render = (engine, self) => {
+                    
+                    print("x: %f, y: %f\n", engine.mouse_x, engine.mouse_y);
+                    
+                    var a = engine.mouse_x - x;
+                    var b = engine.mouse_y - y;
+                    print("a: %f, b: %f\n", a, b);
+                    var c = Math.pow(a, 2) + Math.pow(b, 2);
+                    c = Math.sqrt(c);
+                    var radians = Math.sin(b / c);
+                    var degrees = radians * 57.2957795;
+                    
+                    gun.coords_top_left_x     = 0.00;
+                    gun.coords_top_left_y     = 0.00;
+                    gun.coords_bottom_left_x  = 0.25;
+                    gun.coords_bottom_left_y  = 0.00;
+                    gun.coords_bottom_right_x = 0.25;
+                    gun.coords_bottom_right_y = 0.25;
+                    gun.coords_top_right_x    = 0.00;
+                    gun.coords_top_right_y    = 0.25;
+                    
+                    if (a >= 0.00 && b >= 0.00) {
+                        gun.x = x + width / 2 + gun.width / 2;
+                        degrees = degrees + 360.00;
+                    } 
+                    else if (a <= 0.00 && b >= 0.00) {
+                        gun.x = x - width / 2 - gun.width / 2;
+                        degrees = 360.00 - degrees;
+                        gun.anima_flip();
+                    } 
+                    else if (a <= 0.00 && b <= 0.00) {
+                        gun.x = x - width / 2 - gun.width / 2;
+                        degrees = 360.00 - degrees;
+                        gun.anima_flip();
+                    }
+                    else if (a >= 0.00 && b <= 0.00) {
+                        gun.x = x + width / 2 + gun.width / 2;
+                        degrees = degrees + 360.00;
+                    }
+                    else {
+                        gun.x = x;
+                        degrees = 0.00;
+                    }
+                    print("angle: %f\n", degrees);
+                    
+                    gun.rotation = degrees;
+                    gun.y = y;
+                };
+                engine.sprites.add (gun);
+            }
         });    
-    }
-    
-    public void anima_tile (int x, int y) {
-        coords_top_left_x     = 0.00 + (tile_width * x);
-        coords_top_left_y     = 0.00 + (tile_height * y);
-        coords_bottom_left_x  = tile_width + (tile_width * x);
-        coords_bottom_left_y  = 0.00 + (tile_height * y);
-        coords_bottom_right_x = tile_width + (tile_width * x);
-        coords_bottom_right_y = tile_height + (tile_height * y);
-        coords_top_right_x    = 0.00 + (tile_width * x);
-        coords_top_right_y    = tile_height + (tile_height * y);
-    }
-    
-    public void anima_flip() {
-        var tmp_top_left_x     = this.coords_top_left_x;
-        var tmp_top_left_y     = this.coords_top_left_y;
-        var tmp_bottom_left_x  = this.coords_bottom_left_x;
-        var tmp_bottom_left_y  = this.coords_bottom_left_y;
-        var tmp_bottom_right_x = this.coords_bottom_right_x;
-        var tmp_bottom_right_y = this.coords_bottom_right_y;
-        var tmp_top_right_x    = this.coords_top_right_x;
-        var tmp_top_right_y    = this.coords_top_right_y;
-        
-        this.coords_top_left_x     = tmp_bottom_left_x;
-        this.coords_top_left_y     = tmp_bottom_left_y;
-        this.coords_bottom_left_x  = tmp_top_left_x;
-        this.coords_bottom_left_y  = tmp_top_left_y;
-        this.coords_bottom_right_x = tmp_top_right_x;
-        this.coords_bottom_right_y = tmp_top_right_y;
-        this.coords_top_right_x    = tmp_bottom_right_x;
-        this.coords_top_right_y    = tmp_bottom_right_y;
     }
     
     public void anima_normal () {

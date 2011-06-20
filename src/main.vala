@@ -15,6 +15,7 @@ public class GameDemo : Object {
         engine.gamestate = state;
         
         engine.add_texture ("resources/font.png");
+        engine.add_texture ("resources/Weapons_ThyLordRoot.png");
         
         var text = new Darkcore.SpriteNS.Text.from_texture(engine, 0);
         text.set_text ("Hello World!"); // Testing
