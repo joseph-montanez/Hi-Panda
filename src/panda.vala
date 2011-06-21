@@ -21,7 +21,7 @@ public class Panda : Darkcore.Sprite {
 
         this.on_render = ((engine, player) => {
             
-            anima_normal ();
+            //anima_normal ();
             
             var gravity = 1.0;
             velocity_y -= gravity;
@@ -127,10 +127,10 @@ public class Panda : Darkcore.Sprite {
             }
             
             if (velocity_x > 0.00) {
-                anima_right ();
+                //anima_right ();
             }
             else if (velocity_x < 0.00) {
-                anima_left ();
+                //anima_left ();
             }
             
             y += velocity_y;
@@ -192,39 +192,29 @@ public class Panda : Darkcore.Sprite {
                     gun.coords_top_right_y    = 0.25;
                     
                     if (a >= 0.00 && b >= 0.00) {
-                        gun.x = x + width / 2 + gun.width / 2;
                         degrees = degrees + 360.00;
                     } 
                     else if (a <= 0.00 && b >= 0.00) {
-                        gun.x = x - width / 2 - gun.width / 2;
                         degrees = 360.00 - degrees;
-                        gun.anima_flip();
                     } 
                     else if (a <= 0.00 && b <= 0.00) {
-                        gun.x = x - width / 2 - gun.width / 2;
                         degrees = 360.00 - degrees;
-                        gun.anima_flip();
                     }
                     else if (a >= 0.00 && b <= 0.00) {
-                        gun.x = x + width / 2 + gun.width / 2;
                         degrees = degrees + 360.00;
                     }
-                    else {
-                        gun.x = x;
-                        degrees = 0.00;
+                    anima_right();
+                    if (a < 0.00) {
+                        anima_flip();
+                        gun.anima_flip();
                     }
-                    
-                    //radians = degrees / 57.2957795;
-                    /*
-                    var mod_x = (width / 2 * Math.cos(radians)) - (height / 2 * Math.sin(radians));
-                    var mod_y = (width / 2 * Math.sin(radians)) - (height / 2 * Math.cos(radians));
-                    print("X: %f Y: %f\n", mod_x, mod_y);
-                    gun.x = x - (width) + mod_x * 2;
-                    gun.y = y + height + mod_y * 2;
-                    */
+                    var mod_x = (width / 2 * Math.cos(radians)) - (0 / 2 * Math.sin(radians));
+                    var mod_y = (width / 2 * Math.sin(radians)) + (0 / 2 * Math.cos(radians));
+                    gun.x = a < 0.00 ? x - width / 2 - mod_x * 2 : x + width / 2 + mod_x * 2;
+                    gun.y = y + mod_y * 2;
                     
                     gun.rotation = degrees;
-                    gun.y = y;
+                    //gun.y = y;
                 };
                 engine.sprites.add (gun);
             }
