@@ -43,7 +43,7 @@ public class Panda : Darkcore.Sprite {
             else if (velocity_x < 0.00 && !jumping) {
                 velocity_x += 1.00;
             }
-            // If they are jumping then only apply wide friction?
+            // If they are jumping then only apply wind friction?
             else if (velocity_x < 0.00 && jumping) {
                 velocity_x += 0.35;
             }
@@ -68,6 +68,7 @@ public class Panda : Darkcore.Sprite {
             else if (y + velocity_y - (height / 2) <= 0) {
                 jumping = false;
                 velocity_y = 0;
+                y = 0;
                 jumping_from = new Darkcore.Vector(2);
                 jumping_from.set (0, x);
                 jumping_from.set (1, y);
@@ -168,54 +169,7 @@ public class Panda : Darkcore.Sprite {
             if (engine.keys.up && !has_gun) {
                 has_gun = true;
                 print("up\n");
-                var gun = new Darkcore.Sprite.from_texture(world, 1);
-                
-                gun.width = 32;
-                gun.height = 32;
-                
-                gun.on_render = (engine, self) => {
-                    // Who ever said Pythagoras' Theorem is pointless!
-                    var a = engine.get_abs_mouse_x() - x;
-                    var b = engine.get_abs_mouse_y() - y;
-                    var c = Math.pow(a, 2) + Math.pow(b, 2);
-                    c = Math.sqrt(c);
-                    var radians = Math.sin(b / c);
-                    var degrees = radians * 57.2957795;
-                    
-                    gun.coords_top_left_x     = 0.00;
-                    gun.coords_top_left_y     = 0.00;
-                    gun.coords_bottom_left_x  = 0.25;
-                    gun.coords_bottom_left_y  = 0.00;
-                    gun.coords_bottom_right_x = 0.25;
-                    gun.coords_bottom_right_y = 0.25;
-                    gun.coords_top_right_x    = 0.00;
-                    gun.coords_top_right_y    = 0.25;
-                    
-                    if (a >= 0.00 && b >= 0.00) {
-                        degrees = degrees + 360.00;
-                    } 
-                    else if (a <= 0.00 && b >= 0.00) {
-                        degrees = 360.00 - degrees;
-                    } 
-                    else if (a <= 0.00 && b <= 0.00) {
-                        degrees = 360.00 - degrees;
-                    }
-                    else if (a >= 0.00 && b <= 0.00) {
-                        degrees = degrees + 360.00;
-                    }
-                    anima_right();
-                    if (a < 0.00) {
-                        anima_flip();
-                        gun.anima_flip();
-                    }
-                    var mod_x = (width / 2 * Math.cos(radians)) - (0 / 2 * Math.sin(radians));
-                    var mod_y = (width / 2 * Math.sin(radians)) + (0 / 2 * Math.cos(radians));
-                    gun.x = a < 0.00 ? x - width / 2 - mod_x * 2 : x + width / 2 + mod_x * 2;
-                    gun.y = y + mod_y * 2;
-                    
-                    gun.rotation = degrees;
-                    //gun.y = y;
-                };
+                var gun = new Gun(engine, this);
                 engine.sprites.add (gun);
             }
         });    
