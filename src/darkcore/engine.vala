@@ -66,6 +66,14 @@ namespace Darkcore { public class Engine : Object {
             case EventType.QUIT:
                 this.done = true;
                 break;
+            case EventType.MOUSEBUTTONUP:
+                print("up\n");
+                this.on_mouse_event (event.button, false);
+                break;
+            case EventType.MOUSEBUTTONDOWN:
+                print("down\n");
+                this.on_mouse_event (event.button, true);
+                break;
             case EventType.KEYDOWN:
                 this.on_keyboard_event (event.key, true);
                 break;
@@ -82,6 +90,14 @@ namespace Darkcore { public class Engine : Object {
     
     public double get_abs_mouse_y () {
         return (height - mouse_y) - camera_y;
+    }
+
+    public void on_mouse_event (MouseButtonEvent event, bool isdown) {
+        switch (event.button) {
+            case MouseButton.LEFT:
+                this.keys.mouse_left = isdown;
+                break;
+        }
     }
 
     public void on_keyboard_event (KeyboardEvent event, bool isdown) {

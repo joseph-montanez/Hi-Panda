@@ -4,6 +4,7 @@ using GLU;
 
 namespace Darkcore { public class KeyState : Object {
     public bool up { get; set; default = false; }
+    public bool mouse_left { get; set; default = false; }
     public bool down { get; set; default = false; }
     public bool left { get; set; default = false; }
     public bool right { get; set; default = false; }

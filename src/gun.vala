@@ -13,6 +13,16 @@ public class Gun : Darkcore.Sprite {
         this.width = 32;
         this.height = 32;
         
+        this.on_key_press = (engine, self) => {
+            if (engine.keys.mouse_left) {
+                print("POW\n");
+                var bullet = new Bullet();
+                bullet.x = panda.x;
+                bullet.y = panda.y;
+                engine.sprites.add(bullet);
+            }  
+        };
+        
         this.on_render = (engine, self) => {
             // Who ever said Pythagoras' Theorem is pointless!
             var a = engine.get_abs_mouse_x() - parent.x;

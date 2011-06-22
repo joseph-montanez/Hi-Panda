@@ -26,6 +26,7 @@ FILES = \
     src/darkcore/vector.vala \
     src/main.vala \
     src/gun.vala \
+    src/bullet.vala \
     src/panda.vala
 
 ifeq ($(OS),WIN32)
