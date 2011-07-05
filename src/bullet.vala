@@ -6,9 +6,13 @@ public class Bullet : Darkcore.Sprite {
         color_r = 0;
         color_g = 0;
         color_b = 0;
-        this.on_render = (engine, self) => {
-            x += 0.25;
-        };
+    }
+    
+    public override void on_render () {
+        x += 1.25;
+        if (x > 100) {
+        	world.remove_sprite(this); //sprites.remove_at(world.sprites.size - 1);
+        }
     }
     
     public override void render () {

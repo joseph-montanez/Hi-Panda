@@ -179,6 +179,10 @@ namespace Darkcore { public class Engine : Object {
         
     }
     
+    public void remove_sprite(Sprite item) {
+    	sprites.remove_at(sprites.size - 1);
+    }
+    
 
     public void draw () {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -221,9 +225,7 @@ namespace Darkcore { public class Engine : Object {
         */
         
         foreach (var sprite in this.sprites) {
-            if (sprite.on_render != null) {
-                sprite.fire_render(sprite.on_render, this, sprite);
-            }
+            sprite.on_render();
             sprite.render();
         }
         
@@ -254,9 +256,7 @@ namespace Darkcore { public class Engine : Object {
                 this.process_events ();
 
                 foreach (var sprite in this.sprites) {
-                    if (sprite.on_key_press != null) {
-                        sprite.fire_key_press(sprite.on_key_press, this, sprite);
-                    }
+                    sprite.on_key_press();
                 }      
 
                 foreach (var mgr in timed_events) {

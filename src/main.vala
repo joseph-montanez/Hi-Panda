@@ -8,6 +8,16 @@ public class GameState : Object {
     }
 }
 
+public class FPSText : Darkcore.SpriteNS.Text {
+    public FPSText.from_texture(Darkcore.Engine world, int texture_index) {
+        base.from_texture(world, texture_index);
+    }
+    public override void on_render () {
+        int fps = world.frames_per_second;
+        data = @"Frames per second: $fps";
+    }
+}
+
 public class GameDemo : Object {
     public static int main (string[] args) {
         var engine = new Darkcore.Engine(640, 480);
@@ -17,12 +27,8 @@ public class GameDemo : Object {
         engine.add_texture ("resources/font.png");
         engine.add_texture ("resources/Weapons_ThyLordRoot.png");
         
-        var text = new Darkcore.SpriteNS.Text.from_texture(engine, 0);
+        var text = new FPSText.from_texture(engine, 0);
         text.set_text ("Hello World!"); // Testing
-        text.on_render = (engine, self) => {
-            int fps = engine.frames_per_second;
-            text.data = @"Frames per second: $fps";
-        };
         engine.sprites.add (text);
         
         var block1 = new Darkcore.Sprite();
@@ -62,9 +68,9 @@ public class GameDemo : Object {
         
 
         // Add an event to the renderer
-        engine.add_event(Darkcore.EventTypes.Render, () => {
+        //engine.add_event(Darkcore.EventTypes.Render, () => {
             //player2.x += 0.01;
-        });
+        //});
                 
         engine.run ();
 

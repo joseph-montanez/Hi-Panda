@@ -12,58 +12,58 @@ public class Gun : Darkcore.Sprite {
         
         this.width = 32;
         this.height = 32;
+    }
+    
+    public override void on_render() {
+        // Who ever said Pythagoras' Theorem is pointless!
+        var a = world.get_abs_mouse_x() - parent.x;
+        var b = world.get_abs_mouse_y() - parent.y;
+        var c = Math.pow(a, 2) + Math.pow(b, 2);
+        c = Math.sqrt(c);
+        var radians = Math.sin(b / c);
+        var degrees = radians * 57.2957795;
         
-        this.on_key_press = (engine, self) => {
-            if (engine.keys.mouse_left) {
-                print("POW\n");
-                var bullet = new Bullet();
-                bullet.x = panda.x;
-                bullet.y = panda.y;
-                engine.sprites.add(bullet);
-            }  
-        };
+        this.coords_top_left_x     = 0.00;
+        this.coords_top_left_y     = 0.00;
+        this.coords_bottom_left_x  = 0.25;
+        this.coords_bottom_left_y  = 0.00;
+        this.coords_bottom_right_x = 0.25;
+        this.coords_bottom_right_y = 0.25;
+        this.coords_top_right_x    = 0.00;
+        this.coords_top_right_y    = 0.25;
         
-        this.on_render = (engine, self) => {
-            // Who ever said Pythagoras' Theorem is pointless!
-            var a = engine.get_abs_mouse_x() - parent.x;
-            var b = engine.get_abs_mouse_y() - parent.y;
-            var c = Math.pow(a, 2) + Math.pow(b, 2);
-            c = Math.sqrt(c);
-            var radians = Math.sin(b / c);
-            var degrees = radians * 57.2957795;
-            
-            this.coords_top_left_x     = 0.00;
-            this.coords_top_left_y     = 0.00;
-            this.coords_bottom_left_x  = 0.25;
-            this.coords_bottom_left_y  = 0.00;
-            this.coords_bottom_right_x = 0.25;
-            this.coords_bottom_right_y = 0.25;
-            this.coords_top_right_x    = 0.00;
-            this.coords_top_right_y    = 0.25;
-            
-            if (a >= 0.00 && b >= 0.00) {
-                degrees = degrees + 360.00;
-            } 
-            else if (a <= 0.00 && b >= 0.00) {
-                degrees = 360.00 - degrees;
-            } 
-            else if (a <= 0.00 && b <= 0.00) {
-                degrees = 360.00 - degrees;
-            }
-            else if (a >= 0.00 && b <= 0.00) {
-                degrees = degrees + 360.00;
-            }
-            parent.anima_right();
-            if (a < 0.00) {
-                parent.anima_flip();
-                this.anima_flip();
-            }
-            var mod_x = (parent.width / 2 * Math.cos(radians)) - (0 / 2 * Math.sin(radians));
-            var mod_y = (parent.width / 2 * Math.sin(radians)) + (0 / 2 * Math.cos(radians));
-            this.x = a < 0.00 ? parent.x - parent.width / 2 - mod_x * 2 : parent.x + parent.width / 2 + mod_x * 2;
-            this.y = parent.y + mod_y * 2;
-            
-            this.rotation = degrees;
-        };
+        if (a >= 0.00 && b >= 0.00) {
+            degrees = degrees + 360.00;
+        } 
+        else if (a <= 0.00 && b >= 0.00) {
+            degrees = 360.00 - degrees;
+        } 
+        else if (a <= 0.00 && b <= 0.00) {
+            degrees = 360.00 - degrees;
+        }
+        else if (a >= 0.00 && b <= 0.00) {
+            degrees = degrees + 360.00;
+        }
+        parent.anima_right();
+        if (a < 0.00) {
+            parent.anima_flip();
+            this.anima_flip();
+        }
+        var mod_x = (parent.width / 2 * Math.cos(radians)) - (0 / 2 * Math.sin(radians));
+        var mod_y = (parent.width / 2 * Math.sin(radians)) + (0 / 2 * Math.cos(radians));
+        this.x = a < 0.00 ? parent.x - parent.width / 2 - mod_x * 2 : parent.x + parent.width / 2 + mod_x * 2;
+        this.y = parent.y + mod_y * 2;
+        
+        this.rotation = degrees;
+    }
+    
+    public override void on_key_press() {
+        if (world.keys.mouse_left) {
+            print("POW\n");
+            var bullet = new Bullet();
+            bullet.x = parent.x;
+            bullet.y = parent.y;
+            world.sprites.add(bullet);
+        }  
     }
 }
