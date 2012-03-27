@@ -1,6 +1,6 @@
 using SDLMixer;
 
-namespace Darkcore { class Sound : Object {
+namespace Darkcore { public class Sound : Object {
     public SDLMixer.Music audio; 
     public Sound (string filename) {
         int audio_frequency = 44100;

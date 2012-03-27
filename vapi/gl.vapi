@@ -1208,7 +1208,7 @@ namespace GL
 	public static void glGetTexEnvfv (GLenum target, GLenum pname, [CCode (array_length = false)] GLfloat[] params);
 	public static void glGetTexEnviv (GLenum target, GLenum pname, [CCode (array_length = false)] GLint[] params);
 	public static void glTexParameterf (GLenum target, GLenum pname, GLfloat param);
-	public static void glTexParameteri (GLenum target, GLenum pname, GLint param);
+	public static void glTexParameteri (GLenum target, GLenum pname, GLenum param);
 	public static void glTexParameterfv (GLenum target, GLenum pname, [CCode (array_length = false)] GLfloat[] params);
 	public static void glTexParameteriv (GLenum target, GLenum pname, [CCode (array_length = false)] GLint[] params);
 	public static void glGetTexParameterfv (GLenum target, GLenum pname, [CCode (array_length = false)] GLfloat[] params);

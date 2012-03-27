@@ -57,7 +57,7 @@ namespace Darkcore { public class Engine : Object {
     
     public void process_events () {
         Event event = Event ();
-        while (Event.poll (event) == 1) {
+        while (Event.poll (out event) == 1) {
             switch (event.type) {
             case EventType.MOUSEMOTION:
                 mouse_x = event.motion.x;
@@ -180,7 +180,12 @@ namespace Darkcore { public class Engine : Object {
     }
     
     public void remove_sprite(Sprite item) {
-    	sprites.remove_at(sprites.size - 1);
+        /*
+        if (sprites != null && sprites.size > 0) {
+            print ("delete!");
+    	    sprites.remove_at(sprites.size - 1);
+    	}
+    	*/
     }
     
 

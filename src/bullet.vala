@@ -1,8 +1,9 @@
 using GL;
 
 public class Bullet : Darkcore.Sprite {
-    public Bullet () {
-        base();
+    public Bullet (Darkcore.Engine engine) {
+        base ();
+        this.world = engine;
         color_r = 0;
         color_g = 0;
         color_b = 0;
@@ -11,12 +12,15 @@ public class Bullet : Darkcore.Sprite {
     public override void on_render () {
         x += 1.25;
         if (x > 100) {
-        	world.remove_sprite(this); //sprites.remove_at(world.sprites.size - 1);
+            if (world == null) {
+                print ("SHIT!");
+            } else {
+        	    world.remove_sprite (this);
+            }
         }
     }
     
     public override void render () {
-
         glPushMatrix ();
         glTranslated (x, y, 0.00);
         
@@ -32,9 +36,9 @@ public class Bullet : Darkcore.Sprite {
         
         glLineWidth ((GL.GLfloat) 3.00);
         
-        glBegin(GL_LINE);
-        glVertex2d(x - 4, y - 4);
-        glVertex2d(x + 4, y + 4);
+        glBegin (GL_LINE);
+        glVertex2d (x - 4, y - 4);
+        glVertex2d (x + 4, y + 4);
         glEnd ();
         
         glPopMatrix ();

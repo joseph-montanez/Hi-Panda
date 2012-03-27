@@ -11,7 +11,7 @@ PKGS = \
 LIBS = \
     -X -lSDL_image \
     -X -lSDL_mixer
-FLAGS = -v -g --save-temps --vapidir=vapi
+FLAGS = -v -g --save-temps --vapidir=vapi --enable-checking --enable-mem-profiler
 FILES = \
     src/darkcore/collision.vala \
     src/darkcore/engine.vala \
@@ -54,5 +54,6 @@ clean:
 	find . -type f -name "*.o" -exec rm -f {} \;
 	find . -type f -name "*.h" -exec rm -f {} \;
 	find . -type f -name "*.c" -exec rm -f {} \;
+	find . -type f -name "*.vala~" -exec rm -f {} \;
 	rm main
 

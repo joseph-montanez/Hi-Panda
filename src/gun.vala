@@ -9,7 +9,7 @@ public class Gun : Darkcore.Sprite {
     public Gun (Darkcore.Engine engine, Panda panda) {
         base.from_texture(engine, 1);
         this.parent = panda;
-        
+        this.world = engine;
         this.width = 32;
         this.height = 32;
     }
@@ -60,7 +60,7 @@ public class Gun : Darkcore.Sprite {
     public override void on_key_press() {
         if (world.keys.mouse_left) {
             print("POW\n");
-            var bullet = new Bullet();
+            var bullet = new Bullet(world);
             bullet.x = parent.x;
             bullet.y = parent.y;
             world.sprites.add(bullet);
